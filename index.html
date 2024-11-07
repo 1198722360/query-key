@@ -225,9 +225,7 @@
         .copyright a:hover {
             text-decoration: underline;
         }
-        /*.verify-btn-group {*/
-        /*    display: line-block;*/
-        /*}*/
+
         .verify-btn {
             padding: 3px 8px;
             margin-left: 8px;
@@ -240,18 +238,21 @@
             font-size: 14px;
             line-height: 1.5;
         }
+
         .verify-btn.blue {
-          background-color: #3498db;
-          color: white;
+            background-color: #3498db;
+            color: white;
         }
+
         .verify-btn.blue:hover {
-          background-color: #2980b9;
+            background-color: #2980b9;
         }
 
         .verify-btn.cyan {
             background-color: #1abc9c;
             color: white;
         }
+
         .verify-btn.cyan:hover {
             background-color: #16a085;
         }
@@ -267,6 +268,7 @@
             border-radius: 3px;
             transition: opacity 0.3s;
         }
+
         .verify-btn:hover::after {
             visibility: visible;
             opacity: 1;
@@ -420,13 +422,136 @@
             text-decoration: underline;
         }
 
+        .container {
+            text-align: center;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        #themeToggle {
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 0;
+        }
+
+        #themeToggle svg {
+            width: 24px;
+            height: 24px;
+            transition: transform 0.3s;
+            filter: drop-shadow(0 0 2px #000);
+        }
+
+        body.dark-mode #themeIcon {
+            transform: rotate(180deg);
+            filter: drop-shadow(0 0 2px #fff);
+        }
+
+
+    </style>
+    <style>
+        body.dark-mode {
+            background-color: #121212;
+            color: #e0e0e0;
+        }
+
+        body.dark-mode .container, body.dark-mode .response-container {
+            background-color: rgba(30, 30, 30, 0.7);
+            backdrop-filter: blur(10px);
+            color: #e0e0e0;
+            box-shadow: 0 0 10px rgba(255, 255, 255, 0.1);
+        }
+
+        body.dark-mode h1, body.dark-mode h2, body.dark-mode h3 {
+            color: #1e88e5;
+        }
+
+        body.dark-mode input[type="text"], body.dark-mode textarea {
+            background-color: #2e2e2e;
+            color: #e0e0e0;
+            border: 1px solid #1e88e5;
+        }
+
+        body.dark-mode th {
+            background-color: #3e3e3e;
+        }
+
+        body.light-mode {
+            background-color: #ffffff;
+            color: #000000;
+        }
+
+        body.light-mode .container, body.light-mode .response-container {
+            background-color: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(10px);
+            color: #000000;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        body.light-mode h1, body.light-mode h2, body.light-mode h3 {
+            color: #333333;
+        }
+
+        body.light-mode input[type="text"], body.light-mode textarea {
+            background-color: #ffffff;
+            color: #000000;
+            border: 1px solid #cccccc;
+        }
+
+        body.light-mode th {
+            background-color: #f1f1f1;
+        }
+    </style>
+
+    <style>
+        .dark-mode .layui-layer-content {
+            background-color: #333;
+            color: #fff;
+        }
+
+        .dark-mode .layui-layer-title {
+            background-color: #444;
+            color: #fff;
+        }
+
+        .dark-mode .layui-layer-btn a {
+            background-color: #555;
+            color: #fff;
+        }
+
+        .dark-mode .layui-layer-btn .layui-layer-btn0 {
+            background-color: #666;
+            color: #fff;
+        }
     </style>
 </head>
 <body>
 <div class="container">
+    <div class="header">
+        <div>
+            <button id="themeToggle" aria-label="toggle theme">
+                <svg id="themeIcon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                     fill="transparent" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                     stroke-linejoin="round" class="lucide lucide-sun">
+                    <circle cx="12" cy="12" r="4"></circle>
+                    <path d="M12 2v2"></path>
+                    <path d="M12 20v2"></path>
+                    <path d="m4.93 4.93 1.41 1.41"></path>
+                    <path d="m17.66 17.66 1.41 1.41"></path>
+                    <path d="M2 12h2"></path>
+                    <path d="M20 12h2"></path>
+                    <path d="m6.34 17.66-1.41 1.41"></path>
+                    <path d="m19.07 4.93-1.41 1.41"></path>
+                </svg>
+            </button>
+        </div>
+    </div>
     <h1>API CHECKER</h1>
     <h3>（适配 oneapi/newapi 等中转格式）</h3>
-
     <form id="apiForm">
         <textarea id="api_info" name="api_info"
                   placeholder="懒人专用文本框，支持同时粘贴接口地址和密钥，智能提取，如：https://api.openai.com，sk-TodayIsThursdayVme50ForKFC"></textarea>
@@ -457,35 +582,311 @@
         </div>
     </form>
 </div>
+
 <div id="results" class="response-container"></div>
 
 <script>
-    // 显示公告
-    function showToast() {
-        const message = `
-            <div>
-                <p><strong>如何使用 :</strong></p>
-                <ul>
-                    <div>🕵️ 使用“官转验证”功能确认API的真实性</div>
-                    <div>🕵️‍♀️ 使用“温度验证”功能确认API的真实性</div>
-                    <div>📊 使用“函数验证”功能检测API是否支持FC</div>
-                    <div>🔒 <strong> beta 功能：支持本地缓存API信息，数据仅本地保留，默认关闭</strong> </div>
-                </ul>
-                <br>
-            </div>
-        `;
-        const toast = document.createElement('div');
-        toast.className = 'toast';
-        toast.innerHTML = `${message}
-                           <button onclick="this.parentElement.style.display='none';" aria-label="close">
-                               <svg aria-hidden="true" viewBox="0 0 14 16" width="14" height="16">
-                                   <path fill-rule="evenodd" d="M7.71 8.23l3.75 3.75-1.48 1.48-3.75-3.75-3.75 3.75L1 11.98l3.75-3.75L1 4.48 2.48 3l3.75 3.75L9.98 3l1.48 1.48-3.75 3.75z"></path>
-                               </svg>
-                           </button>`;
-        document.body.appendChild(toast);
+    // 检测是否处于黑暗模式
+    function detectDarkMode() {
+        const isDarkMode = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+        if (isDarkMode) {
+            document.body.classList.add('dark-mode');
+            document.body.classList.remove('light-mode');
+        } else {
+            document.body.classList.add('light-mode');
+            document.body.classList.remove('dark-mode');
+        }
+        updateToastStyle(isDarkMode);
     }
 
-    showToast();
+    // 切换主题
+    function toggleTheme() {
+        const isDarkMode = document.body.classList.contains('dark-mode');
+        if (isDarkMode) {
+            document.body.classList.remove('dark-mode');
+            document.body.classList.add('light-mode');
+            document.getElementById('themeIcon').innerHTML = `
+            <circle cx="12" cy="12" r="4"></circle>
+            <path d="M12 2v2"></path>
+            <path d="M12 20v2"></path>
+            <path d="m4.93 4.93 1.41 1.41"></path>
+            <path d="m17.66 17.66 1.41 1.41"></path>
+            <path d="M2 12h2"></path>
+            <path d="M20 12h2"></path>
+            <path d="m6.34 17.66-1.41 1.41"></path>
+            <path d="m19.07 4.93-1.41 1.41"></path>
+        `;
+            updateToastStyle(false);
+        } else {
+            document.body.classList.remove('light-mode');
+            document.body.classList.add('dark-mode');
+            document.getElementById('themeIcon').innerHTML = `
+            <path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"></path>
+        `;
+            updateToastStyle(true);
+        }
+    }
+
+    // 更新公告样式
+    function updateToastStyle(isDarkMode) {
+        const toasts = document.querySelectorAll('.custom-toast, .custom-set-toast');
+        toasts.forEach(toast => {
+            if (isDarkMode) {
+                toast.style.backgroundColor = 'rgba(30, 30, 30, 0.8)';
+                toast.style.color = 'white';
+                toast.style.boxShadow = '0 0 10px rgba(255, 255, 255, 0.1)';
+            } else {
+                toast.style.backgroundColor = 'rgba(255, 255, 255, 0.8)';
+                toast.style.color = 'black';
+                toast.style.boxShadow = '0 0 10px rgba(0, 0, 0, 0.1)';
+            }
+        });
+    }
+
+    // 监听系统主题变化
+    window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', event => {
+        if (event.matches) {
+            document.body.classList.add('dark-mode');
+            document.body.classList.remove('light-mode');
+            updateToastStyle(true);
+        } else {
+            document.body.classList.add('light-mode');
+            document.body.classList.remove('dark-mode');
+            updateToastStyle(false);
+        }
+    });
+
+    // 页面加载时检测
+    window.onload = function () {
+        detectDarkMode();
+        document.getElementById('themeToggle').addEventListener('click', toggleTheme);
+    };
+</script>
+<script>
+    // 在页面加载时调用getQueryParams函数自动填充表单
+    document.addEventListener('DOMContentLoaded', () => {
+        getQueryParams();
+        detectDarkMode();
+    });
+
+    function getQueryParams() {
+        const params = new URLSearchParams(window.location.search);
+        const settings = params.get('settings');
+        if (settings) {
+            try {
+                const settingsObj = JSON.parse(decodeURIComponent(settings));
+                if (settingsObj.key) {
+                    document.getElementById('api_key').value = settingsObj.key;
+                }
+                if (settingsObj.url) {
+                    document.getElementById('api_url').value = settingsObj.url;
+                }
+                if (settingsObj.models) {
+                    document.getElementById('model_name').value = settingsObj.models.join(',');
+                }
+                if (settingsObj.timeout) {
+                    document.getElementById('model_timeout').value = settingsObj.timeout;
+                }
+                if (settingsObj.concurrency) {
+                    document.getElementById('model_concurrency').value = settingsObj.concurrency;
+                }
+                if (!settingsObj.closeAnnouncement) {
+                    showToast();
+                }
+                showSettingsToast();
+            } catch (e) {
+                console.error('解析URL参数失败:', e);
+            }
+        } else {
+            showToast();
+        }
+    }
+
+    // 显示设置弹窗
+    function showSettingsToast() {
+        const skMasked = document.getElementById('api_key').value.slice(0, 5) + '*****';
+
+        const message = `
+        <div>
+            <p><strong>已填入预制设置</strong></p>
+            <br>
+            <div>🔑 密钥: ${skMasked}</div>
+            <div>🔗 接口地址: ${document.getElementById('api_url').value}</div>
+            <div>📦 模型: ${document.getElementById('model_name').value}</div>
+            <div>⏱ 请求超时: ${document.getElementById('model_timeout').value} 秒</div>
+            <div>🔁 并发数量: ${document.getElementById('model_concurrency').value}</div>
+        </div>
+    `;
+        const set_toast = document.createElement('div');
+        set_toast.className = 'custom-set-toast';
+        set_toast.innerHTML = `${message}`;
+        // 添加样式使其居中并有高斯模糊和透明效果
+        set_toast.style.position = 'fixed';
+        set_toast.style.top = '50%';
+        set_toast.style.left = '50%';
+        set_toast.style.transform = 'translate(-50%, -50%)';
+        set_toast.style.backgroundColor = 'rgba(255, 255, 255, 0.7)';
+        set_toast.style.backdropFilter = 'blur(10px)';
+        set_toast.style.color = 'black';
+        set_toast.style.padding = '20px';
+        set_toast.style.borderRadius = '10px';
+        set_toast.style.boxShadow = '0 0 10px rgba(0, 0, 0, 0.1)';
+        set_toast.style.zIndex = '1000';
+        set_toast.style.textAlign = 'center';
+
+        // 检测黑暗模式
+        const isDarkMode = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+        if (isDarkMode) {
+            set_toast.style.backgroundColor = 'rgba(30, 30, 30, 0.7)';
+            set_toast.style.color = 'white';
+            set_toast.style.boxShadow = '0 0 10px rgba(255, 255, 255, 0.1)';
+        }
+
+        document.body.appendChild(set_toast);
+
+        // 2秒后自动关闭
+        setTimeout(() => {
+            set_toast.style.display = 'none';
+        }, 2000);
+    }
+
+    // 显示公告
+    function showToast() {
+        const isSpecificDomain = location.hostname === 'check.crond.dev';
+        const message = `
+        <div>
+            <p><strong>API CHECKER v1.4</strong></p>
+            <br>
+            <div>仓库地址:  <a href="https://github.com/QAbot-zh/query-key" target="_blank" style="color: #1e88e5">QAbot-zh/query-key</a></div><div>点点star 可以自行部署</div>
+            <br>
+            <p><strong>启用新域名: </strong> <a href="https://check.crond.dev" target="_blank" style="color: #1e88e5">https://check.crond.dev</a></p>
+            <br>
+            ${isSpecificDomain ? `
+            <div class="rick">
+                <p><strong>公益api地址: </strong> <a href="https://api.crond.dev" target="_blank" style="color: #1e88e5">https://api.crond.dev</a></p>
+                <p><strong>项目介绍&amp;捐赠详情: </strong> <a href="https://api.crond.dev/about" target="_blank" style="color: #1e88e5">https://api.crond.dev/about</a></p>
+            </div>
+            ` : ''}
+            <br>
+            <p ><span></span> <strong>如何使用 :</strong></p>
+            <div>
+                <ul>
+                    <div>🕵️ 使用“官转验证”功能确认API的真实性</div>
+                    <div>🧊 使用“温度验证”功能确认API的一致性</div>
+                    <div>📊 使用“函数验证”功能检测API的FC支持</div>
+                    <div>🔒 <strong> beta 功能：支持本地缓存API信息，数据仅本地保留，默认关闭</strong> </div>
+                </ul>
+            </div>
+            <br>
+            <p class="collapsible"><span class="triangle"></span> <strong>版本历史:</strong></p>
+            <div class="content">
+                <ul>
+                    <div><a href="https://linux.do/t/topic/199694" target="_blank" style="color: #1e88e5">v1.4版本介绍</a></div>
+                    <div><a href="https://linux.do/t/topic/191420" target="_blank" style="color: #1e88e5">v1.3版本介绍</a></div>
+                    <div><a href="https://linux.do/t/topic/190955" target="_blank" style="color: #1e88e5">v1.2版本介绍</a></div>
+                    <div><a href="https://linux.do/t/topic/196537" target="_blank" style="color: #1e88e5">beta功能</a></div>
+                </ul>
+            </div>
+            <br>
+            <p class="collapsible"><span class="triangle"></span> <strong>Tips:</strong></p>
+            <div class="content">
+                <div>🌱 仅GPT系列，可实现官转验证，系统判断仅供参考，原理请查阅 <a href="https://linux.do/t/topic/191420" target="_blank" style="color: #1e88e5">v1.3版本介绍</a></div>
+                <div>🌡️ 温度验证：低温度参数下，大模型回复的稳定性。测试结果仅供参考，原理请查阅 <a href="https://linux.do/t/topic/195972" target="_blank" style="color: #1e88e5">温度验证</a></div>
+            </div>
+        </div>
+    `;
+        const toast = document.createElement('div');
+        toast.className = 'custom-toast';
+        toast.innerHTML = `${message}
+                       <button onclick="this.parentElement.style.display='none';" aria-label="close">
+                           <svg aria-hidden="true" viewBox="0 0 14 16" width="14" height="16">
+                               <path fill-rule="evenodd" d="M7.71 8.23l3.75 3.75-1.48 1.48-3.75-3.75-3.75 3.75L1 11.98l3.75-3.75L1 4.48 2.48 3l3.75 3.75L9.98 3l1.48 1.48-3.75 3.75z"></path>
+                           </svg>
+                       </button>`;
+        document.body.appendChild(toast);
+
+        // 添加样式
+        const style = document.createElement('style');
+        style.innerHTML = `
+        .collapsible {
+            cursor: pointer;
+            user-select: none;
+        }
+        .content {
+            display: none;
+            overflow: hidden;
+        }
+        .triangle::before {
+            content: "▶";
+            display: inline-block;
+            transform: rotate(0deg);
+            transition: transform 0.3s;
+        }
+        .active .triangle::before {
+            transform: rotate(90deg);
+        }
+        .custom-toast {
+            position: fixed;
+            top: 10px;
+            right: -100%;
+            background-color: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(10px);
+            color: black;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+            text-align: left;
+            width: 300px;
+            max-width: 90%;
+            animation: slideIn 1s forwards;
+        }
+        .custom-toast button {
+            background: none;
+            border: none;
+            cursor: pointer;
+            position: absolute;
+            top: 10px;
+            right: 10px;
+        }
+        .custom-toast button svg {
+            fill: currentColor;
+        }
+        @keyframes slideIn {
+            from {
+                right: -100%;
+            }
+            to {
+                right: 10px;
+            }
+        }
+    `;
+        document.head.appendChild(style);
+
+        // 检测黑暗模式并添加样式
+        const isDarkMode = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+        updateToastStyle(isDarkMode);
+
+        // 监听系统主题变化
+        window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', event => {
+            updateToastStyle(event.matches);
+        });
+
+        // 添加折叠事件
+        const collapsibles = document.getElementsByClassName("collapsible");
+        for (let i = 0; i < collapsibles.length; i++) {
+            collapsibles[i].addEventListener("click", function () {
+                this.classList.toggle("active");
+                const content = this.nextElementSibling;
+                if (content.style.display === "block") {
+                    content.style.display = "none";
+                } else {
+                    content.style.display = "block";
+                }
+            });
+        }
+    }
+
     // 智能提取API信息
     document.getElementById('api_info').addEventListener('input', function () {
         let text = this.value;
@@ -550,23 +951,23 @@
             let content = '<div style="padding: 20px;"><form class="layui-form">';
             content += '<div id="selectedCount">已选择 0 个模型</div>';
             content += `
-                <div class="model-filter-container">
-                    <input type="text" id="prefixFilter" placeholder="输入模型前缀筛选">
-                    <button type="button" onclick="filterModels()">筛选</button>
-                    <button type="button" class="clear" onclick="clearFilter()">清空</button>
-                </div>
-                <div class="checkbox-container">
-                    <label><input type="checkbox" lay-skin="primary" lay-filter="checkAll" title="全选"></label>
-                    <label><input type="checkbox" lay-skin="primary" lay-filter="checkAllChatOnly" title="全选（过滤音/图/视/嵌入模型）"></label>
-                </div>
-            `;
+            <div class="model-filter-container">
+                <input type="text" id="prefixFilter" placeholder="输入模型前缀筛选">
+                <button type="button" onclick="filterModels()">筛选</button>
+                <button type="button" class="clear" onclick="clearFilter()">清空</button>
+            </div>
+            <div class="checkbox-container">
+                <label><input type="checkbox" lay-skin="primary" lay-filter="checkAll" title="全选"></label>
+                <label><input type="checkbox" lay-skin="primary" lay-filter="checkAllChatOnly" title="全选（过滤音/图/视/嵌入模型）"></label>
+            </div>
+        `;
             content += '<div id="modelList">';
             models.forEach((model, index) => {
                 content += `
-                    <div class="layui-form-item model-item" data-model="${model}">
-                        <input type="checkbox" name="models[${index}]" value="${model}" title="${model}" lay-skin="primary">
-                    </div>
-                `;
+                <div class="layui-form-item model-item" data-model="${model}">
+                    <input type="checkbox" name="models[${index}]" value="${model}" title="${model}" lay-skin="primary">
+                </div>
+            `;
             });
             content += '</div></form></div>';
 
@@ -579,6 +980,12 @@
                 success: function (layero, index) {
                     form.render('checkbox');
                     setupEventListeners(layero, form);
+
+                    // 检查黑暗模式
+                    if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+                        layero[0].style.backgroundColor = '#121212';
+                        layero[0].style.color = '#e0e0e0';
+                    }
                 },
                 yes: function (index, layero) {
                     const selectedModels = layero.find('input[name^="models"]:checked').map(function () {
@@ -590,6 +997,7 @@
             });
         });
     }
+
 
     function setupEventListeners(layero, form) {
         form.on('checkbox', function (data) {
@@ -739,7 +1147,7 @@
 
                     if (response.ok) {
                         const data = await response.json();
-                        const returnedModel = data.model || "no returned model by rick"; // 确保 returnedModel 有效
+                        const returnedModel = data.model || "no returned model"; // 确保 returnedModel 有效
                         if (returnedModel === model) {
                             results.valid.push({model, responseTime});
                             if (/^(gpt-|chatgpt-|o1-)/.test(model)) {
@@ -831,8 +1239,7 @@
     // 显示测试结果
     function displayResults(results) {
         const resultsDiv = document.getElementById('results');
-        let content = '<h2>测试结果</h2>' +
-            '<h3>（结果仅供参考，防君子不防小人）</h3>' +
+        let content = '<h2>测试报告</h2>' +
             '<div class="submit-container">' +
             '<input type="button" onclick="copyConsistentModels()" value="复制一致模型" class="check-quota">' +
             '<input type="button" onclick="copyConsistentAndInconsistentModels()" value="复制可用模型" class="check-quota">' +
@@ -891,12 +1298,12 @@
                 `;
             }
             let highlightedReturnModel = r.returnedModel;
-            if (r.returnedModel.startsWith(`${r.model}-`)){
+            if (r.returnedModel.startsWith(`${r.model}-`)) {
                 highlightedReturnModel = `<span style="color: green; font-weight: bold;">${r.model}</span>${r.returnedModel.slice(r.model.length)}<br>可能是带版本号模型映射`;
             }
             content += `
                 <tr>
-                    <td class="td1 td1-no" >模型不一致/映射，tnnd掺假？</td>
+                    <td class="td1 td1-no" >模型未匹配/模型映射</td>
                     <td class="td2">
                         <span class="copy-btn2"" onclick="copyText('${r.model}')">${r.model}</span>
                     </td>
@@ -912,7 +1319,7 @@
 
         results.invalid.forEach(function (r) {
             content += '<tr>' +
-                '<td class="td1 td1-error">模型不可用!!!，干啥呢</td>' +
+                '<td class="td1 td1-error">模型调用失败</td>' +
                 '<td class="td2"><span class="copy-btn2" onclick="copyText(\'' + r.model + '\')">' + r.model + '</span></td>' +
                 '<td class="td3">-</td>' +
                 '<td class="td4">' + (r.response_text || r.error) + '</td>' +
@@ -921,6 +1328,14 @@
 
         content += '</table>';
         resultsDiv.innerHTML = content;
+
+        if (document.body.classList.contains('dark-mode')) {
+            resultsDiv.style.backgroundColor = '#2e2e2e';
+            resultsDiv.style.color = '#e0e0e0';
+            resultsDiv.querySelectorAll('th, td').forEach(element => {
+                element.style.borderColor = '#555';
+            });
+        }
     }
 
     async function verifyOfficial(model) {
@@ -938,6 +1353,7 @@
             });
         });
     }
+
     function findMostFrequent(arr) {
         const frequency = {};
         let maxCount = 0;
@@ -952,98 +1368,97 @@
             }
         }
 
-        return { element: mostFrequentElement, count: maxCount };
+        return {element: mostFrequentElement, count: maxCount};
     }
+
     async function verifyTemperature(model) {
         layui.use("layer", function () {
-          const layer = layui.layer;
-          layer.load();
+            const layer = layui.layer;
+            layer.load();
         });
 
         try {
-          const results = await Promise.all(
-            [1, 2, 3, 4].map(() => sendTemperatureVerificationRequest(model))
-          );
-          const responses = results.map((result) =>
-            result.choices
-              ? result?.choices?.[0]?.message?.content?.trim()
-              : "该次调用响应异常"
-          );
-          const referenceMap = {
-            "gpt-4o-mini": 32,
-            "gpt-4o": 59,
-            "claude-3-5": 51,
-            "claude-3.5": 51
-          };
-          const matchedKey = Object.keys(referenceMap).find(key => model.startsWith(key));
-          let referenceValue = matchedKey ? referenceMap[matchedKey] : null;
+            const results = await Promise.all(
+                [1, 2, 3, 4].map(() => sendTemperatureVerificationRequest(model))
+            );
+            const responses = results.map((result) =>
+                result.choices
+                    ? result?.choices?.[0]?.message?.content?.trim()
+                    : "该次调用响应异常"
+            );
+            const referenceMap = {
+                "gpt-4o-mini": 32,
+                "gpt-4o": 59,
+                "claude-3-5": 51,
+                "claude-3.5": 51
+            };
+            const matchedKey = Object.keys(referenceMap).find(key => model.startsWith(key));
+            let referenceValue = matchedKey ? referenceMap[matchedKey] : null;
 
-          layui.use("layer", function () {
-            const layer = layui.layer;
-            layer.closeAll("loading");
+            layui.use("layer", function () {
+                const layer = layui.layer;
+                layer.closeAll("loading");
 
-            let message = `<strong>当前待验证模型：${model}</strong><p>参考值：c3.5 = 51(gcp测试)，gpt-4o = 59，gpt-4o-mini = 32(azure测试)</p>`;
-            message +=
-              '<table style="width:100%; border-collapse: collapse; margin-bottom: 20px;">' +
-              '<tr><th style="border: 1px solid #ddd; padding: 4px;">测试</th><th style="border: 1px solid #ddd; padding: 4px;">响应</th></tr>';
-            let hitReferenceCount = 0;
-            let color;
-            for (let i = 0; i < 4; i++) {
-              if (responses[i] === referenceValue) {
-                hitReferenceCount++;
-                color = "green";
-              }
-              else if (responses[i] === "该次调用响应失败"){
-                color = "red"
-              }
-              else{
-                color = "black";
-              }
-              message +=
-                "<tr>" +
-                '<td style="border: 1px solid #ddd; padding: 4px;">测试 ' +
-                (i + 1) +
-                "</td>" +
-                `<td style="border: 1px solid #ddd; padding: 4px; color: ${color};">` +
-                responses[i] +
-                "</td>" +
-                "</tr>";
-            }
-
-            message += "</table><strong>结论：</strong>";
-
-            frequencyCheckResult = findMostFrequent(responses);
-            const diffentCount = frequencyCheckResult.count;
-
-            if (diffentCount === responses.length) {
-                message += "所有响应相同，可能是官方API";
-            } else {
-                message += `响应结果重复度：${diffentCount}/${responses.length}`;
-                // 检查模型前缀是否符合条件
-                if (/^(gpt-4o|claude-3-5|claude-3.5)/.test(model)) {
-                    message += `，参考值命中率：${hitReferenceCount}/${responses.length}`;
+                let message = `<strong>当前待验证模型：${model}</strong><p>参考值：c3.5 = 51(gcp测试)，gpt-4o = 59，gpt-4o-mini = 32(azure测试)</p>`;
+                message +=
+                    '<table style="width:100%; border-collapse: collapse; margin-bottom: 20px;">' +
+                    '<tr><th style="border: 1px solid #ddd; padding: 4px;">测试</th><th style="border: 1px solid #ddd; padding: 4px;">响应</th></tr>';
+                let hitReferenceCount = 0;
+                let color;
+                for (let i = 0; i < 4; i++) {
+                    if (responses[i] === referenceValue) {
+                        hitReferenceCount++;
+                        color = "green";
+                    } else if (responses[i] === "该次调用响应失败") {
+                        color = "red"
+                    } else {
+                        color = "black";
+                    }
+                    message +=
+                        "<tr>" +
+                        '<td style="border: 1px solid #ddd; padding: 4px;">测试 ' +
+                        (i + 1) +
+                        "</td>" +
+                        `<td style="border: 1px solid #ddd; padding: 4px; color: ${color};">` +
+                        responses[i] +
+                        "</td>" +
+                        "</tr>";
                 }
-                message += "，可能不是官方API";
-            }
 
-            message += "<br>";
+                message += "</table><strong>结论：</strong>";
 
-            layer.alert(message, {
-              title: "温度验证结果（<strong>无参考值模型请自行根据结果重复度判断</strong>）",
-              area: ["600px", "400px"],
+                frequencyCheckResult = findMostFrequent(responses);
+                const diffentCount = frequencyCheckResult.count;
+
+                if (diffentCount === responses.length) {
+                    message += "所有响应相同，可能是官方API";
+                } else {
+                    message += `响应结果重复度：${diffentCount}/${responses.length}`;
+                    // 检查模型前缀是否符合条件
+                    if (/^(gpt-4o|claude-3-5|claude-3.5)/.test(model)) {
+                        message += `，参考值命中率：${hitReferenceCount}/${responses.length}`;
+                    }
+                    message += "，可能不是官方API";
+                }
+
+                message += "<br>";
+
+                layer.alert(message, {
+                    title: "温度验证结果（<strong>无参考值模型请自行根据结果重复度判断</strong>）",
+                    area: ["600px", "400px"],
+                });
             });
-          });
         } catch (error) {
-          console.error("Error in verifyTemperature:", error);
-          layui.use("layer", function () {
-            const layer = layui.layer;
-            layer.closeAll("loading");
-            layer.alert("验证过程中发生错误: " + error.message, {
-              title: "错误",
+            console.error("Error in verifyTemperature:", error);
+            layui.use("layer", function () {
+                const layer = layui.layer;
+                layer.closeAll("loading");
+                layer.alert("验证过程中发生错误: " + error.message, {
+                    title: "错误",
+                });
             });
-          });
         }
-      }
+    }
 
     async function sendTemperatureVerificationRequest(model) {
         const apiUrl = document
@@ -1052,36 +1467,36 @@
         const apiKey = document.getElementById("api_key").value;
         try {
             const response = await fetch(`${apiUrl}/v1/chat/completions`, {
-            method: "POST",
-            headers: {
-                Authorization: `Bearer ${apiKey}`,
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-                messages: [
-                {
-                    role: "system",
-                    content:
-                    "You're an associative thinker. The user gives you a sequence of 6 numbers. Your task is to figure out and provide the 7th number directly, without explaining how you got there.",
+                method: "POST",
+                headers: {
+                    Authorization: `Bearer ${apiKey}`,
+                    "Content-Type": "application/json",
                 },
-                {
-                    role: "user",
-                    content: "5, 15, 77, 19, 53, 54,",
-                },
-                ],
-                temperature: 0.01,
-                model: model,
-            }),
+                body: JSON.stringify({
+                    messages: [
+                        {
+                            role: "system",
+                            content:
+                                "You're an associative thinker. The user gives you a sequence of 6 numbers. Your task is to figure out and provide the 7th number directly, without explaining how you got there.",
+                        },
+                        {
+                            role: "user",
+                            content: "5, 15, 77, 19, 53, 54,",
+                        },
+                    ],
+                    temperature: 0.01,
+                    model: model,
+                }),
             });
 
             if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
+                throw new Error(`HTTP error! status: ${response.status}`);
             }
 
             return await response.json();
         } catch (error) {
             console.error("Error in sendTemperatureVerificationRequest:", error);
-            return { error: error.message };
+            return {error: error.message};
         }
     }
 
@@ -1134,7 +1549,7 @@
 
                 let title = '验证结果';
                 let message = '';
-                if (validFingerprintsCount >=3 && similarityCount >= 3) {
+                if (validFingerprintsCount >= 3 && similarityCount >= 3) {
                     title = '恭喜你，大概率是官方API呀！';
                     message += '<strong>Tips: 这是官方API！</strong>';
                 } else if (validFingerprintsCount >= 2 && similarityCount >= 2) {
@@ -1214,12 +1629,12 @@
     async function verifyFunctionCalling(model) {
         console.log("开始验证函数调用");
         layui.use('layer', function () {
-        const layer = layui.layer;
+            const layer = layui.layer;
 
-        layer.open({
-            title: '请输入两个整数 a 和 b',
-            area: ['400px', '250px'],
-            content: `
+            layer.open({
+                title: '请输入两个整数 a 和 b',
+                area: ['400px', '250px'],
+                content: `
                 <div style="padding: 10px;">
                     <div style="margin-bottom: 10px;">
                         <label style="display: inline-block; width: 100px;">请输入整数 a:</label>
@@ -1231,22 +1646,23 @@
                     </div>
                 </div>
             `,
-            btn: ['确定', '取消'],
-            yes: function (index, layero) {
-                const a = parseInt(document.getElementById('inputA').value);
-                const b = parseInt(document.getElementById('inputB').value);
+                btn: ['确定', '取消'],
+                yes: function (index, layero) {
+                    const a = parseInt(document.getElementById('inputA').value);
+                    const b = parseInt(document.getElementById('inputB').value);
 
-                if (isNaN(a) || isNaN(b)) {
-                    layer.msg('请输入有效的整数 a 和 b');
-                    return;
+                    if (isNaN(a) || isNaN(b)) {
+                        layer.msg('请输入有效的整数 a 和 b');
+                        return;
+                    }
+
+                    layer.close(index);
+                    performFunctionCallingVerification(model, a, b);
                 }
-
-                layer.close(index);
-                performFunctionCallingVerification(model, a, b);
-            }
+            });
         });
-    });
     }
+
     async function sendFunctionCallingRequest(model, a, b) {
         const apiUrl = document.getElementById('api_url').value.replace(/\/+$/, '');
         const apiKey = document.getElementById('api_key').value;
@@ -1267,18 +1683,18 @@
                             "name": "add_numbers",
                             "description": "Adds two numbers together",
                             "parameters": {
-                            "type": "object",
-                            "properties": {
-                                "a": {
-                                "type": "number",
-                                "description": "The first number"
+                                "type": "object",
+                                "properties": {
+                                    "a": {
+                                        "type": "number",
+                                        "description": "The first number"
+                                    },
+                                    "b": {
+                                        "type": "number",
+                                        "description": "The second number"
+                                    }
                                 },
-                                "b": {
-                                "type": "number",
-                                "description": "The second number"
-                                }
-                            },
-                            "required": ["a", "b"]
+                                "required": ["a", "b"]
                             }
                         }
                     ],
@@ -1298,6 +1714,7 @@
             return {error: error.message};
         }
     }
+
     async function performFunctionCallingVerification(model, a, b) {
         layui.use('layer', function () {
             const layer = layui.layer;
@@ -1323,10 +1740,9 @@
                 const title = '<b><span style="color: black;">模型函数调用响应对比（非openai模型的函数调用响应可能有差异，但肉眼可辨）</span></b>';
                 let text;
                 // 第一种是 openai 的函数调用响应，第二种是经 oneapi 中转后 gemini 的函数调用响应，目前手里只有这两种支持 FC
-                if(result.choices?.[0]?.finish_reason === 'function_call' || result.choices?.[0]?.message?.tool_calls?.[0]?.type === "function"){
+                if (result.choices?.[0]?.finish_reason === 'function_call' || result.choices?.[0]?.message?.tool_calls?.[0]?.type === "function") {
                     text = '<b><span style="color: green;">模型返回了函数调用响应，测试模型为：' + model + '</span></b>';
-                }
-                else{
+                } else {
                     text = '<b><span style="color: red;">模型无函数调用响应返回，测试模型为：' + model + '</span></b>';
                 }
                 const referenceFunctionCall = JSON.stringify({
@@ -1411,14 +1827,73 @@
 
     // 复制文本功能
     function copyText(text) {
-        navigator.clipboard.writeText(text).then(() => {
-            layui.use('layer', function () {
-                const layer = layui.layer;
-                layer.msg('模型名已复制到剪贴板');
+        if (window.self !== window.top) {
+            // 如果在iframe内，显示弹窗输入框
+            showCopyToast(text);
+        } else {
+            // 如果不在iframe内，使用Clipboard API进行复制
+            navigator.clipboard.writeText(text).then(() => {
+                layui.use('layer', function () {
+                    const layer = layui.layer;
+                    layer.msg('模型名已复制到剪贴板');
+                });
+            }).catch(err => {
+                console.error('复制失败:', err);
             });
-        }).catch(err => {
-            console.error('复制失败:', err);
-        });
+        }
+    }
+
+    // 显示复制失败的弹窗
+    function showCopyToast(text) {
+        const message = `
+<div style="position: relative;">
+    <button onclick="this.parentElement.parentElement.style.display='none';" aria-label="close" style="position: absolute; top: 10px; right: 10px; background: none; border: none; cursor: pointer;">
+        <svg aria-hidden="true" viewBox="0 0 14 16" width="14" height="16">
+            <path fill-rule="evenodd" d="M7.71 8.23l3.75 3.75-1.48 1.48-3.75-3.75-3.75 3.75L1 11.98l3.75-3.75L1 4.48 2.48 3l3.75 3.75L9.98 3l1.48 1.48-3.75 3.75z"></path>
+        </svg>
+    </button>
+    <p><strong>复制失败，请手动复制以下内容：</strong></p>
+    <br>
+    <textarea id="copyTextArea" style="width: 100%; height: 100px; padding: 10px; border: 1px solid #ccc; border-radius: 5px;">${text}</textarea>
+    <br>
+    <button onclick="manualCopy()" style="margin-top: 10px; padding: 10px 20px; background-color: #4CAF50; color: white; border: none; border-radius: 5px; cursor: pointer;">复制</button>
+</div>
+`;
+
+        const copy_toast = document.createElement('div');
+        copy_toast.className = 'copy_toast';
+        copy_toast.innerHTML = `${message}`;
+        // 添加样式使其居中并有高斯模糊和透明效果
+        copy_toast.style.position = 'fixed';
+        copy_toast.style.top = '50%';
+        copy_toast.style.left = '50%';
+        copy_toast.style.transform = 'translate(-50%, -50%)';
+        copy_toast.style.backgroundColor = 'rgba(255, 255, 255, 0.9)';
+        copy_toast.style.backdropFilter = 'blur(10px)';
+        copy_toast.style.color = 'black';
+        copy_toast.style.padding = '20px';
+        copy_toast.style.borderRadius = '10px';
+        copy_toast.style.boxShadow = '0 0 10px rgba(0, 0, 0, 0.1)';
+        copy_toast.style.zIndex = '1000';
+        copy_toast.style.textAlign = 'center';
+        copy_toast.style.width = '300px';
+
+        // 检查黑暗模式
+        if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+            copy_toast.style.backgroundColor = 'rgba(30, 30, 30, 0.9)';
+            copy_toast.style.color = 'white';
+            copy_toast.style.boxShadow = '0 0 10px rgba(255, 255, 255, 0.1)';
+        }
+
+        document.body.appendChild(copy_toast);
+    }
+
+    function manualCopy() {
+        const copyTextArea = document.getElementById('copyTextArea');
+        copyTextArea.select();
+        document.execCommand('copy');
+        alert('内容已复制到剪贴板');
+        document.querySelector('.copy_toast').remove();
     }
 
 
@@ -1468,7 +1943,26 @@
 
                     const showInfo = `可用额度为: ${remainInfo}\n\n已用额度为: ${usedInfo}\n\n总额度为: ${quotaInfo}`;
                     layer.closeAll('loading');
-                    layer.alert(showInfo);
+
+                    // 检测黑暗模式
+                    const isDarkMode = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+                    // 弹窗内容
+                    const content = `<div>${showInfo}</div>`;
+
+                    const alertOptions = {
+                        title: '检查额度',
+                        area: ['300px', '200px']
+                    };
+
+                    // 显示弹窗之前，添加或移除黑暗模式的CSS类
+                    // if (isDarkMode) {
+                    //     document.body.classList.add('dark-mode');
+                    // } else {
+                    //     document.body.classList.remove('dark-mode');
+                    // }
+
+                    layer.alert(content, alertOptions);
                 })
                 .catch(error => {
                     layer.closeAll('loading');
@@ -1520,7 +2014,5 @@
         copyText(uniqueModels.join(','));
     }
 
-
-</script>
 </body>
 </html>
